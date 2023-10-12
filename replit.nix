@@ -1,5 +1,5 @@
 { pkgs }: {
-  deps = [
-    pkgs.gnuplot
-  ];
+    deps = [
+      pkgs.gnuplot
+    ];
 }
