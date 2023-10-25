@@ -36,8 +36,8 @@ void draw_usa_flag(gdImagePtr img) {
     white = gdImageColorAllocate(img, 255, 255, 255); // 白色条纹
     blue = gdImageColorAllocate(img, 60, 59, 110); // 蓝色矩形
 
-    int stripe_height = height / 13;
-    int stripe_width = width;
+    int stripe_height = 33 ;
+    int stripe_width = width ;
     int star_size = (int)(0.0308 * height); // 星星大小
 
     for (int y = 0; y < height; y += stripe_height) {
@@ -48,12 +48,12 @@ void draw_usa_flag(gdImagePtr img) {
         }
     }
 
-    gdImageFilledRectangle(img, 0, 0, width * 2 / 5, stripe_height * 7, blue);
+    gdImageFilledRectangle(img, 0, 0, width * 2 / 5, stripe_height * 698 / 100, blue);
 
     int star_spacing_x = (int)(0.129 * height); // 横向星星之间的间距
     int star_spacing_y = (int)(0.054 * height); // 纵向星星之间的间距
     int star_start_x = (int)(0.125 * height); // 星星的起始X位置
-    int star_start_y = (int)(0.0485 * height); // 星星的起始Y位置
+    int star_start_y = (int)(0.06 * height); // 星星的起始Y位置
 
     for (int row = 0; row < 9; row++) {
         int starsPerRow = (row % 2 == 0) ? 6 : 5;
