@@ -2,6 +2,7 @@
         <head>
         <title>cmsite</title>
         <meta charset="utf-8">
+<meta property="head" content="H2">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700,900" rel="stylesheet">
         <link rel="stylesheet" href="./../cmsimde/static/chimper/fonts/icomoon/style.css">
@@ -95,6 +96,7 @@ img.add_border {
 </head>
 <body>
 <div class='container'><nav>
+        
     <div class="site-wrap">
 
     <div class="site-mobile-menu">
@@ -140,4 +142,206 @@ img.add_border {
           </div>
           
         </header>
-    </nav><section><h1>SMap</h1><div id="tipue_search_content"></div><ul><li><a href='About.html'>About</a><li><a href='Week 5.html'>Week 5</a><li><a href='Week 6.html'>Week 6</a><li><a href='Week 7.html'>Week 7</a><li><a href='ANSIC.html'>ANSIC</a><ul><li><a href='根據輸入年份產生日曆.html'>根據輸入年份產生日曆</a><li><a href='計算階層.html'>計算階層</a><li><a href='計算閏年.html'>計算閏年</a><li><a href='建立乘法表.html'>建立乘法表</a><li><a href='檢查質數.html'>檢查質數</a><li><a href='猜數字.html'>猜數字</a><li><a href='反轉數字.html'>反轉數字</a><li><a href='總和.html'>總和</a><li><a href='判斷三角形.html'>判斷三角形</a><li><a href='x的n次方.html'>x的n次方</a></li></ul><li><a href='c.ex.html'>c.ex</a><li><a href='Brython.html'>Brython</a></li></ul></section></div></body></html>
+    <div id="tipue_search_content">ANSIC << <a href='ANSIC.html'>Previous</a> <a href='計算階層.html'>Next</a> >> 計算階層<br /><h1>根據輸入年份產生日曆</h1>
+<pre class="brush:csharp;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+// 定義版面大小
+int width = 40, year; 
+int cols, lead, gap;
+
+// 星期幾
+const char *wdays[] = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
+
+// 每個月有幾天
+struct months {
+  const char *name;
+  int days, start_wday, at;
+} months[12] = {
+  { "January",	31, 0, 0 },
+  { "February",	28, 0, 0 },
+  { "March",	31, 0, 0 },
+  { "April",	30, 0, 0 },
+  { "May",	31, 0, 0 },
+  { "June",	30, 0, 0 },
+  { "July",	31, 0, 0 },
+  { "August",	31, 0, 0 },
+  { "September",	30, 0, 0 },
+  { "October",	31, 0, 0 },
+  { "November",	30, 0, 0 },
+  { "December",	31, 0, 0 }
+};
+
+// 間距
+void space(int n) { while (n-- &gt; 0) putchar(' '); }
+
+// 初始化月份資訊
+void init_months()
+{
+  int i;
+
+  // 判斷閏年
+  if ((!(year % 4) &amp;&amp; (year % 100)) || !(year % 400))
+    months[1].days = 29;
+
+  // 計算每個月份的起始星期幾
+  year--;
+  months[0].start_wday = (year * 365 + year/4 - year/100 + year/400 + 1) % 7;
+
+  for (i = 1; i &lt; 12; i++)
+    months[i].start_wday = (months[i-1].start_wday + months[i-1].days) % 7;
+
+  // 計算列數和間距
+  cols = (width + 2) / 22;
+  while (12 % cols) cols--;
+  gap = cols - 1 ? (width - 20 * cols) / (cols - 1) : 0;
+  if (gap &gt; 4) gap = 4;
+  lead = (width - (20 + gap) * cols + gap + 1) / 2;
+  year++;
+}
+
+// 輸出日曆
+void print_row(int row)
+{
+  int c, i, from = row * cols, to = from + cols;
+  
+  // 輸出月份
+  space(lead);
+  for (c = from; c &lt; to; c++) {
+    i = strlen(months[c].name);
+    space((20 - i)/2);
+    printf("%s", months[c].name);
+    space(20 - i - (20 - i)/2 + ((c == to - 1) ? 0 : gap));
+  }
+  putchar('\n');
+
+  // 輸出星期幾
+  space(lead);
+  for (c = from; c &lt; to; c++) {
+    for (i = 0; i &lt; 7; i++)
+      printf("%s%s", wdays[i], i == 6 ? "" : " ");
+    if (c &lt; to - 1) space(gap);
+    else putchar('\n');
+  }
+
+  // 輸出日期
+  while (1) {
+    for (c = from; c &lt; to; c++)
+      if (months[c].at &lt; months[c].days) break;
+    if (c == to) break;
+
+    space(lead);
+    for (c = from; c &lt; to; c++) {
+      for (i = 0; i &lt; months[c].start_wday; i++) space(3);
+      while(i++ &lt; 7 &amp;&amp; months[c].at &lt; months[c].days) {
+        printf("%2d", ++months[c].at);
+        if (i &lt; 7 || c &lt; to - 1) putchar(' ');
+      }
+      while (i++ &lt;= 7 &amp;&amp; c &lt; to - 1) space(3);
+      if (c &lt; to - 1) space(gap - 1);
+      months[c].start_wday = 0;
+    }
+    putchar('\n');
+  }
+  putchar('\n');
+}
+
+// 輸出整年的日曆
+void print_year()
+{
+  int row;
+  char buf[32];
+  sprintf(buf, "%d", year);
+  space((width - strlen(buf)) / 2);
+  printf("%s\n\n", buf);
+  for (row = 0; row * cols &lt; 12; row++)
+    print_row(row);
+}
+
+// 檢查年份是否設置
+int main(int c, char **v)
+{ 
+  int i, year_set = 0;
+
+  // 讀取年份
+  printf("Input a valid year: ");
+  {
+    scanf ("%d", &amp;year); 
+    for (i = 1; i &lt; c; i++) {
+  // 檢查是否有設定寬度參數
+   if (!strcmp(v[i], "-w")) {
+  if (++i == c || (width = atoi(v[i])) &lt; 20)
+          goto bail;
+      } else if (!year_set) {
+  // 讀取年份參數
+   if (!sscanf(v[i], "%d", &amp;year) || year &lt;= 0)
+          year = 1969;
+        year_set = 1;
+      } else
+        goto bail;
+    }
+
+    init_months();
+    print_year();
+    return 0;
+    
+  bail:
+    fprintf(stderr, "bad args\nUsage: %s year [-w width (&gt;= 20)]\n", v[0]);
+    exit(1);
+  }
+}</pre>
+<p><a href="https://nfuedu-my.sharepoint.com/:v:/g/personal/41223226_nfu_edu_tw/EXZl5mv64AlEthlhkL5A9ncBEr2EblgVqzZ7izWFfwWaUw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&amp;e=HxX74c" title="year.mp4">year.mp4</a> 操作說明影片</p>
+<p><img alt="" height="217" src="./../images/螢幕擷取畫面 2023-12-21 051706.png" width="400"/></p>
+<p></p>
+<br />ANSIC << <a href='ANSIC.html'>Previous</a> <a href='計算階層.html'>Next</a> >> 計算階層</div>
+        
+    <!-- footer -->
+      <div class="container">
+        <div class="row pt-3 mx-auto">
+            <p>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank" >Colorlib</a>
+            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+            </p>
+        </div>
+      </div>
+    <!-- for footer -->
+    
+        </div> <!-- for site wrap -->
+            <!-- <script src="../cmsimde/static/chimper/js/jquery-3.3.1.min.js"></script> -->
+            <script src="../cmsimde/static/chimper/js/jquery-migrate-3.0.1.min.js"></script>
+            <script src="../cmsimde/static/chimper/js/jquery-ui.js"></script>
+            <script src="../cmsimde/static/chimper/js/popper.min.js"></script>
+            <script src="../cmsimde/static/chimper/js/bootstrap.min.js"></script>
+            <script src="../cmsimde/static/chimper/js/owl.carousel.min.js"></script>
+            <script src="../cmsimde/static/chimper/js/jquery.stellar.min.js"></script>
+            <script src="../cmsimde/static/chimper/js/jquery.countdown.min.js"></script>
+            <script src="../cmsimde/static/chimper/js/jquery.magnific-popup.min.js"></script>
+            <script src="../cmsimde/static/chimper/js/bootstrap-datepicker.min.js"></script>
+            <script src="../cmsimde/static/chimper/js/aos.js"></script>
+            <!--
+            <script src="../cmsimde/static/chimper/js/typed.js"></script>
+                    <script>
+                    var typed = new Typed('.typed-words', {
+                    strings: ["Web Apps"," WordPress"," Mobile Apps"],
+                    typeSpeed: 80,
+                    backSpeed: 80,
+                    backDelay: 4000,
+                    startDelay: 1000,
+                    loop: true,
+                    showCursor: true
+                    });
+                    </script>
+            -->
+            <script src="../cmsimde/static/chimper/js/main.js"></script>
+        
+<!-- 啟用 LaTeX equations 編輯 -->
+  <!-- <script>
+  MathJax = {
+    tex: {inlineMath: [['$', '$'], ['\(', '\)']]}
+  };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>-->
+    </body></html>
+        

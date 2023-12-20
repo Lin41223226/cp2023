@@ -3,7 +3,7 @@
 #include <string.h>
 
 // 定義版面大小
-int width = 40, year; 
+int width = 120, year; 
 int cols, lead, gap;
 
 // 星期幾

@@ -44,156 +44,7 @@ int main() {
   
     return 0;
 }</pre>
-<p><img alt="" height="210" src="/images/gnuplot_ex1.png" width="420"/></p>
-<pre class="brush:py" contenteditable="false">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;string.h&gt;
-
-// 定義版面大小
-int width = 40, year; 
-int cols, lead, gap;
-
-// 星期幾
-const char *wdays[] = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
-
-// 每個月有幾天
-struct months {
-  const char *name;
-  int days, start_wday, at;
-} months[12] = {
-  { "January",	31, 0, 0 },
-  { "February",	28, 0, 0 },
-  { "March",	31, 0, 0 },
-  { "April",	30, 0, 0 },
-  { "May",	31, 0, 0 },
-  { "June",	30, 0, 0 },
-  { "July",	31, 0, 0 },
-  { "August",	31, 0, 0 },
-  { "September",	30, 0, 0 },
-  { "October",	31, 0, 0 },
-  { "November",	30, 0, 0 },
-  { "December",	31, 0, 0 }
-};
-
-// 間距
-void space(int n) { while (n-- &gt; 0) putchar(' '); }
-
-// 初始化月份資訊
-void init_months()
-{
-  int i;
-
-  // 判斷閏年
-  if ((!(year % 4) &amp;&amp; (year % 100)) || !(year % 400))
-    months[1].days = 29;
-
-  // 計算每個月份的起始星期幾
-  year--;
-  months[0].start_wday = (year * 365 + year/4 - year/100 + year/400 + 1) % 7;
-
-  for (i = 1; i &lt; 12; i++)
-    months[i].start_wday = (months[i-1].start_wday + months[i-1].days) % 7;
-
-  // 計算列數和間距
-  cols = (width + 2) / 22;
-  while (12 % cols) cols--;
-  gap = cols - 1 ? (width - 20 * cols) / (cols - 1) : 0;
-  if (gap &gt; 4) gap = 4;
-  lead = (width - (20 + gap) * cols + gap + 1) / 2;
-  year++;
-}
-
-// 輸出日曆
-void print_row(int row)
-{
-  int c, i, from = row * cols, to = from + cols;
-  
-  // 輸出月份
-  space(lead);
-  for (c = from; c &lt; to; c++) {
-    i = strlen(months[c].name);
-    space((20 - i)/2);
-    printf("%s", months[c].name);
-    space(20 - i - (20 - i)/2 + ((c == to - 1) ? 0 : gap));
-  }
-  putchar('\n');
-
-  // 輸出星期幾
-  space(lead);
-  for (c = from; c &lt; to; c++) {
-    for (i = 0; i &lt; 7; i++)
-      printf("%s%s", wdays[i], i == 6 ? "" : " ");
-    if (c &lt; to - 1) space(gap);
-    else putchar('\n');
-  }
-
-  // 輸出日期
-  while (1) {
-    for (c = from; c &lt; to; c++)
-      if (months[c].at &lt; months[c].days) break;
-    if (c == to) break;
-
-    space(lead);
-    for (c = from; c &lt; to; c++) {
-      for (i = 0; i &lt; months[c].start_wday; i++) space(3);
-      while(i++ &lt; 7 &amp;&amp; months[c].at &lt; months[c].days) {
-        printf("%2d", ++months[c].at);
-        if (i &lt; 7 || c &lt; to - 1) putchar(' ');
-      }
-      while (i++ &lt;= 7 &amp;&amp; c &lt; to - 1) space(3);
-      if (c &lt; to - 1) space(gap - 1);
-      months[c].start_wday = 0;
-    }
-    putchar('\n');
-  }
-  putchar('\n');
-}
-
-// 輸出整年的日曆
-void print_year()
-{
-  int row;
-  char buf[32];
-  sprintf(buf, "%d", year);
-  space((width - strlen(buf)) / 2);
-  printf("%s\n\n", buf);
-  for (row = 0; row * cols &lt; 12; row++)
-    print_row(row);
-}
-
-// 檢查年份是否設置
-int main(int c, char **v)
-{ 
-  int i, year_set = 0;
-
-  // 讀取年份
-  printf("Input a valid year: ");
-  {
-    scanf ("%d", &amp;year); 
-    for (i = 1; i &lt; c; i++) {
-  // 檢查是否有設定寬度參數
-   if (!strcmp(v[i], "-w")) {
-  if (++i == c || (width = atoi(v[i])) &lt; 20)
-          goto bail;
-      } else if (!year_set) {
-  // 讀取年份參數
-   if (!sscanf(v[i], "%d", &amp;year) || year &lt;= 0)
-          year = 1969;
-        year_set = 1;
-      } else
-        goto bail;
-    }
-
-    init_months();
-    print_year();
-    return 0;
-    
-  bail:
-    fprintf(stderr, "bad args\nUsage: %s year [-w width (&gt;= 20)]\n", v[0]);
-    exit(1);
-  }
-}</pre>
-<p><a href="https://nfuedu-my.sharepoint.com/:v:/g/personal/41223226_nfu_edu_tw/EXZl5mv64AlEthlhkL5A9ncBEr2EblgVqzZ7izWFfwWaUw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&amp;e=HxX74c" title="year.mp4"><img alt="" src="/images/year.mp4" width="400"/>year.mp4</a> 操作過程與註解</p>
+<p><img alt="" height="210" src="/images/gnuplot_ex1.png" width="420"/><a href="https://nfuedu-my.sharepoint.com/:v:/g/personal/41223226_nfu_edu_tw/EXZl5mv64AlEthlhkL5A9ncBEr2EblgVqzZ7izWFfwWaUw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&amp;e=HxX74c" title="year.mp4"><img alt="" src="/images/year.mp4" width="400"/></a></p>
 <h1>Week 6</h1>
 <pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
 #include &lt;gd.h&gt;
@@ -1370,8 +1221,708 @@ if (outputFile == NULL) {
   }</pre>
 <p><img alt="" height="267" src="/images/korea_flag.png" width="400"/><br/><br/><br/></p>
 <h1>ANSIC</h1>
+<h2>根據輸入年份產生日曆</h2>
+<pre class="brush:csharp;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+// 定義版面大小
+int width = 40, year; 
+int cols, lead, gap;
+
+// 星期幾
+const char *wdays[] = { "Su", "Mo", "Tu", "We", "Th", "Fr", "Sa" };
+
+// 每個月有幾天
+struct months {
+  const char *name;
+  int days, start_wday, at;
+} months[12] = {
+  { "January",	31, 0, 0 },
+  { "February",	28, 0, 0 },
+  { "March",	31, 0, 0 },
+  { "April",	30, 0, 0 },
+  { "May",	31, 0, 0 },
+  { "June",	30, 0, 0 },
+  { "July",	31, 0, 0 },
+  { "August",	31, 0, 0 },
+  { "September",	30, 0, 0 },
+  { "October",	31, 0, 0 },
+  { "November",	30, 0, 0 },
+  { "December",	31, 0, 0 }
+};
+
+// 間距
+void space(int n) { while (n-- &gt; 0) putchar(' '); }
+
+// 初始化月份資訊
+void init_months()
+{
+  int i;
+
+  // 判斷閏年
+  if ((!(year % 4) &amp;&amp; (year % 100)) || !(year % 400))
+    months[1].days = 29;
+
+  // 計算每個月份的起始星期幾
+  year--;
+  months[0].start_wday = (year * 365 + year/4 - year/100 + year/400 + 1) % 7;
+
+  for (i = 1; i &lt; 12; i++)
+    months[i].start_wday = (months[i-1].start_wday + months[i-1].days) % 7;
+
+  // 計算列數和間距
+  cols = (width + 2) / 22;
+  while (12 % cols) cols--;
+  gap = cols - 1 ? (width - 20 * cols) / (cols - 1) : 0;
+  if (gap &gt; 4) gap = 4;
+  lead = (width - (20 + gap) * cols + gap + 1) / 2;
+  year++;
+}
+
+// 輸出日曆
+void print_row(int row)
+{
+  int c, i, from = row * cols, to = from + cols;
+  
+  // 輸出月份
+  space(lead);
+  for (c = from; c &lt; to; c++) {
+    i = strlen(months[c].name);
+    space((20 - i)/2);
+    printf("%s", months[c].name);
+    space(20 - i - (20 - i)/2 + ((c == to - 1) ? 0 : gap));
+  }
+  putchar('\n');
+
+  // 輸出星期幾
+  space(lead);
+  for (c = from; c &lt; to; c++) {
+    for (i = 0; i &lt; 7; i++)
+      printf("%s%s", wdays[i], i == 6 ? "" : " ");
+    if (c &lt; to - 1) space(gap);
+    else putchar('\n');
+  }
+
+  // 輸出日期
+  while (1) {
+    for (c = from; c &lt; to; c++)
+      if (months[c].at &lt; months[c].days) break;
+    if (c == to) break;
+
+    space(lead);
+    for (c = from; c &lt; to; c++) {
+      for (i = 0; i &lt; months[c].start_wday; i++) space(3);
+      while(i++ &lt; 7 &amp;&amp; months[c].at &lt; months[c].days) {
+        printf("%2d", ++months[c].at);
+        if (i &lt; 7 || c &lt; to - 1) putchar(' ');
+      }
+      while (i++ &lt;= 7 &amp;&amp; c &lt; to - 1) space(3);
+      if (c &lt; to - 1) space(gap - 1);
+      months[c].start_wday = 0;
+    }
+    putchar('\n');
+  }
+  putchar('\n');
+}
+
+// 輸出整年的日曆
+void print_year()
+{
+  int row;
+  char buf[32];
+  sprintf(buf, "%d", year);
+  space((width - strlen(buf)) / 2);
+  printf("%s\n\n", buf);
+  for (row = 0; row * cols &lt; 12; row++)
+    print_row(row);
+}
+
+// 檢查年份是否設置
+int main(int c, char **v)
+{ 
+  int i, year_set = 0;
+
+  // 讀取年份
+  printf("Input a valid year: ");
+  {
+    scanf ("%d", &amp;year); 
+    for (i = 1; i &lt; c; i++) {
+  // 檢查是否有設定寬度參數
+   if (!strcmp(v[i], "-w")) {
+  if (++i == c || (width = atoi(v[i])) &lt; 20)
+          goto bail;
+      } else if (!year_set) {
+  // 讀取年份參數
+   if (!sscanf(v[i], "%d", &amp;year) || year &lt;= 0)
+          year = 1969;
+        year_set = 1;
+      } else
+        goto bail;
+    }
+
+    init_months();
+    print_year();
+    return 0;
+    
+  bail:
+    fprintf(stderr, "bad args\nUsage: %s year [-w width (&gt;= 20)]\n", v[0]);
+    exit(1);
+  }
+}</pre>
+<p><a href="https://nfuedu-my.sharepoint.com/:v:/g/personal/41223226_nfu_edu_tw/EXZl5mv64AlEthlhkL5A9ncBEr2EblgVqzZ7izWFfwWaUw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&amp;e=HxX74c" title="year.mp4">year.mp4</a> 操作說明影片</p>
+<p><img alt="" height="217" src="/images/螢幕擷取畫面 2023-12-21 051706.png" width="400"/></p>
 <p></p>
-<h1>c_ex</h1>
+<h2>計算階層</h2>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+
+int main(){
+    int i, f = 1, num;  // 宣告變數 'i' 作為迴圈計數器，'f' 用於存儲階乘，'num' 用於接收使用者輸入。
+
+    printf("輸入一個數字 : ");  // 提示使用者輸入。
+    scanf("%d", &amp;num);  // 從使用者讀取 'num' 的值。
+
+    for (i = 1; i &lt;= num; i++)  // 開始計算階乘的迴圈。
+        f = f * i;  // 計算階乘。
+
+    printf("%d 的階乘是：%d\n", num, f);  // 印出計算得到的階乘。
+    return 0;  // 表示程式成功執行。
+}</pre>
+<p><img alt="" height="64" src="/images/螢幕擷取畫面 2023-12-21 052200.png" width="200"/></p>
+<h2>計算閏年</h2>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+
+void main()
+{
+    int chk_year;   // 宣告一個整數變數 'chk_year'。
+
+    printf("輸入一個年份：");   // 提示使用者輸入年份。
+    scanf("%d", &amp;chk_year);   // 讀取並儲存使用者輸入的年份於 'chk_year'。
+
+    if ((chk_year % 400) == 0)   // 檢查 'chk_year' 是否能被400整除且沒有餘數。
+        printf("%d 年是閏年。\n", chk_year);   // 印出 'chk_year' 是閏年的訊息。
+    else if ((chk_year % 100) == 0)   // 檢查 'chk_year' 是否能被100整除且沒有餘數。
+        printf("%d 年不是閏年。\n", chk_year);   // 印出 'chk_year' 不是閏年的訊息。
+    else if ((chk_year % 4) == 0)   // 檢查 'chk_year' 是否能被4整除且沒有餘數。
+        printf("%d 年是閏年。\n", chk_year);   // 印出 'chk_year' 是閏年的訊息。
+    else
+        printf("%d 年不是閏年。\n", chk_year);   // 印出 'chk_year' 不是閏年的訊息。
+}</pre>
+<p><img alt="" height="58" src="/images/螢幕擷取畫面 2023-12-21 052902.png" width="200"/></p>
+<h2>建立乘法表</h2>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+
+int main()
+{
+   int j, i, n;
+
+   // 提示用戶輸入表格範圍的最後一個數字
+   printf("輸入要顯示的乘法表範圍（起始數字為1）：");
+   scanf("%d", &amp;n);
+
+   // 顯示從1到n的乘法表
+   printf("1 到 %d 的乘法表：\n", n);
+
+   // 雙層循環用於產生乘法表
+   for (i = 1; i &lt;= 10; i++)
+   {
+      for (j = 1; j &lt;= n; j++)
+      {
+         // 顯示每個乘法表運算式及結果
+         printf("%dx%d = %d, ", j, i, i * j);
+      }
+      printf("\n"); // 換行以顯示下一個數字的乘法表
+   }
+
+   return 0;
+}
+</pre>
+<img alt="" height="126" src="/images/螢幕擷取畫面 2023-12-21 053357.png" width="427"/>
+<h2>檢查質數</h2>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+
+// 函式原型：檢查一個數字是否為質數
+int PrimeOrNot(int);
+
+int main()
+{
+    int n1, prime;
+
+    // 提示用戶輸入正整數
+    printf("\n\n 函式：檢查一個數字是否為質數：\n");
+    printf("---------------------------------------------------------------\n");    
+
+    printf(" 輸入一個正整數 : ");
+    scanf("%d", &amp;n1);
+
+    // 呼叫函式 PrimeOrNot 檢查是否為質數
+    prime = PrimeOrNot(n1);
+
+    if (prime == 1)
+        printf(" 數字 %d 是一個質數。\n", n1);
+    else
+        printf(" 數字 %d 不是質數。\n", n1);
+
+    return 0;
+}
+
+// 函式定義：檢查一個數字是否為質數
+int PrimeOrNot(int n1)
+{
+    int i = 2;
+
+    // 使用迴圈從2開始檢查是否有因數
+    while (i &lt;= n1 / 2)
+    {
+        if (n1 % i == 0)
+            return 0; // 若有因數，返回0表示不是質數
+        else
+            i++;
+    }
+
+    return 1; // 若沒有因數，返回1表示是質數
+}</pre>
+<img alt="" height="87" src="/images/螢幕擷取畫面 2023-12-21 053709.png" width="316"/>
+<h2>猜數字</h2>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;time.h&gt;
+
+int main()           // 主函式的開始。
+{
+    int number, input;   // 宣告兩個整數變數 'number' 和 'input'。
+
+    srand(time(NULL));   // 使用當前時間初始化隨機數種子。
+
+    number = rand() % 10 + 1;   // 生成一個介於1和10之間的隨機數，並將其存儲在 'number' 中。
+
+    do {   // 開始 do-while 迴圈。
+        printf("\n猜測數字 (1 到 10): ");   // 印出提示使用者猜測數字的訊息。
+        scanf("%d", &amp;input);    // 讀取使用者的輸入並將其存儲在 'input' 中。
+
+        if (number &gt; input)   // 如果隨機數大於使用者的輸入。
+            printf("數字較大\n");   // 印出數字較大的訊息。
+
+    } while (number != input);   // 只要使用者的輸入不等於隨機數，就繼續迴圈。
+
+    printf("答對了！\n\n");   // 印出答對的訊息。
+
+    return 0;   // 返回0，表示程序成功執行。
+}   // 主函式的結束。#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;time.h&gt;
+
+int main()           // 主函式的開始。
+{
+    int number, input;   // 宣告兩個整數變數 'number' 和 'input'。
+
+    srand(time(NULL));   // 使用當前時間初始化隨機數種子。
+
+    number = rand() % 10 + 1;   // 生成一個介於1和10之間的隨機數，並將其存儲在 'number' 中。
+
+    do {   // 開始 do-while 迴圈。
+        printf("\n猜測數字 (1 到 10): ");   // 印出提示使用者猜測數字的訊息。
+        scanf("%d", &amp;input);    // 讀取使用者的輸入並將其存儲在 'input' 中。
+
+        if (number &gt; input)   // 如果隨機數大於使用者的輸入。
+            printf("數字較大\n");   // 印出數字較大的訊息。
+
+    } while (number != input);   // 只要使用者的輸入不等於隨機數，就繼續迴圈。
+
+    printf("答對了！\n\n");   // 印出答對的訊息。
+
+    return 0;   // 返回0，表示程序成功執行。
+}   // 主函式的結束。</pre>
+<p><img alt="" height="112" src="/images/螢幕擷取畫面 2023-12-21 053845.png" width="200"/></p>
+<h2>反轉數字</h2>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+
+// 定義反轉整數的函式
+int reverse(int n) {
+    int d, y = 0;
+    while (n) {
+        d = n % 10;
+        // 檢查溢位情況，以確保反轉後的整數仍在 int 範圍內
+        if ((n &gt; 0 &amp;&amp; y &gt; (0x7fffffff - d) / 10) ||
+            (n &lt; 0 &amp;&amp; y &lt; ((signed)0x80000000 - d) / 10)) {
+            return 0;  // 如果溢位，則返回 0
+        }
+        y = y * 10 + d;
+        n = n / 10;
+    }
+    return y;  // 返回反轉後的整數
+}
+
+int main(void)
+{
+    int i = 123;
+    printf("原始整數: %d  ", i);
+    printf("\n反轉後的整數: %d  ", reverse(i));
+
+    return 0;
+}</pre>
+<p><img alt="" height="43" src="/images/螢幕擷取畫面 2023-12-21 054111.png" width="200"/></p>
+<h2>總和</h2>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include&lt;stdio.h&gt;
+
+// 宣告函式原型
+int sumOfRange(int);
+
+int main() 
+{
+   int n1;
+   int sum;
+
+   // 提示用戶輸入範圍的最後一個數字
+   printf("\n\n 遞迴 : 計算從1到n的數字總和 :\n");
+   printf("-----------------------------------------------------------\n");    
+
+   printf(" 輸入範圍的最後一個數字（起始數字為1） : ");
+   scanf("%d", &amp;n1);
+
+   // 呼叫函式計算總和
+   sum = sumOfRange(n1); 
+   printf("\n 1 到 %d 的數字總和 : %d\n\n", n1, sum);
+
+   return (0);
+}
+
+// 定義計算範圍內數字總和的函式
+int sumOfRange(int n1) 
+{
+   int res;
+   if (n1 == 1) 
+   {
+      return (1);
+   } 
+   else 
+   {
+      // 遞迴呼叫 sumOfRange 函式
+      res = n1 + sumOfRange(n1 - 1);
+   }
+   return (res);
+}</pre>
+<p><img alt="" height="144" src="/images/螢幕擷取畫面 2023-12-21 054254.png" width="400"/></p>
+<h2>判斷三角形</h2>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;  // 包含標準輸入/輸出的標頭文件。
+
+int main()  
+{  
+    int sidea, sideb, sidec; // 宣告三角形的三邊的變數。
+
+    /* 
+     * 讀取三角形的三邊長
+     */  
+    printf("輸入三角形的三邊長: ");  // 提示使用者輸入。
+    scanf("%d %d %d", &amp;sidea, &amp;sideb, &amp;sidec);  // 讀取並儲存三角形的三邊。
+
+    if (sidea == sideb &amp;&amp; sideb == sidec) // 檢查是否所有邊都相等。  
+    {  
+        printf("這是一個等邊三角形。\n");  // 印出等邊三角形的訊息。
+    }  
+    else if (sidea == sideb || sidea == sidec || sideb == sidec) // 檢查是否有兩邊相等。  
+    {  
+        printf("這是一個等腰三角形。\n");  // 印出等腰三角形的訊息。
+    }  
+    else // 如果沒有邊相等。  
+    {  
+        printf("這是一個不等邊三角形。\n");  // 印出不等邊三角形的訊息。
+    }  
+
+    return 0;  
+} 
+</pre>
+<p><img alt="" height="108" src="/images/螢幕擷取畫面 2023-12-21 054442.png" width="260"/></p>
+<h2>x的n次方</h2>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+#include &lt;limits.h&gt;
+
+// 定義計算 x 的 n 次方的函式
+double powxn(double x, int n) {
+    double k;
+    if (n == 0) return 1;  // 若 n 為 0，則 x 的 0 次方為 1。
+    k = powxn(x * x, n / 2);  // 遞迴計算 x^2 的 (n/2) 次方。
+    if (n % 2) k = k * x;  // 若 n 為奇數，則乘上額外的 x。
+    return k;
+}
+
+int main(void)
+{
+    double x = 7.0;
+    int n = 2;
+    printf("\nx = %f, y = %d  ", x, n);
+    printf("\nResult:(x^n) : %f ", powxn(x, n));
+
+    x = 6.2;
+    n = 3;
+    printf("\n\nx = %f, y = %d  ", x, n);
+    printf("\nResult:(x^n) : %f ", powxn(x, n));
+
+    return 0;
+}</pre>
+<p><img alt="" height="117" src="/images/螢幕擷取畫面 2023-12-21 054808.png" width="387"/></p>
+<h1>c.ex</h1>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+void main()
+{
+ /* 印出 Hello */
+printf("Hello World!");
+}</pre>
+<p><img alt="" height="39" src="/images/c1.png" width="201"/></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+int main()
+{
+/* 印出 Hello World! Bye Bye */
+printf("Hello World! ");
+printf("Bye ");
+printf("Bye");
+return 0;
+}
+</pre>
+<p><img alt="" height="44" src="/images/c2.png" width="269"/></p>
+<p>#include &lt;stdio.h&gt;<br/>int main()<br/>{<br/>int a = 1;<br/>int A = 8;<br/>int b = 2, c;<br/>c = A - a + b;<br/>/* 輸出 a, A, b, c 到螢幕 */<br/>printf( "a = %d, A = %d, b = %d, c = %d ", a, A, b, c );<br/>return 0;<br/>}</p>
+<p><img alt="" height="44" src="/images/c3.png" width="315"/></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+void main()
+{
+float a = 0.5;
+double b = 1.2;
+int c = 3;
+b = b + a + c;
+/* 輸出 a, b, c 到螢幕 */
+printf( " a = %3.1f, b = %3.1f, c = %d ", a ,b, c );
+}
+</pre>
+<p><img alt="" height="39" src="/images/c4.png" width="302"/></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">6c#include &lt;stdio.h&gt;
+int main()
+{
+char x, y;
+x = 'a';
+y = (char)97;
+/* 輸出 x, y, x, 最後一個是以 ASCII 值顯示 y */
+printf( " x = %c, y = %c, ASCII of y = %d", x, y, y );
+return 0;
+}
+</pre>
+<p><img alt="" height="35" src="/images/c5.png" width="331"/></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+
+int main()
+{
+    int a = 64;
+    int b = 0x40;
+    long c = 64L;
+    printf("%d, %d, %ld", a, b, c);
+    return 0;
+}
+</pre>
+<p><img alt="" height="43" src="/images/c6.png" width="179"/></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+int main()
+{
+int i;
+printf("Input an integer:");
+scanf( "%d", &amp;i ); /* ch 前面加個 &amp;(位址運算元) */
+printf( "the number is %d", i );
+return 0;
+}</pre>
+<p><img alt="" height="51" src="/images/c7.png" width="221"/></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include&lt;stdio.h&gt;
+int main()
+{
+int a,b;
+a = 10; b = 3;
+printf( "%d \n", a * b );
+printf( "%d \n", a / b );
+printf( "%d \n", a + b );
+printf( "%d \n", a - b );
+printf( "%d \n", a % b );
+return 0;
+}</pre>
+<p><img alt="" height="100" src="/images/c8.png" width="174"/></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+int main()
+{
+int a = 10, b = 5;
+printf( " a == b is %d \n", a == b );
+printf( " a &gt; b is %d \n", a &gt; b );
+printf( " a &lt; b is %d \n", a &lt; b );
+printf( " a &gt;= b is %d \n", a &gt;= b );
+printf( " a &lt;= b is %d \n", a &lt;= b );
+printf( " a != b is %d \n", a != b );
+printf( "\n" );
+b = 10;
+printf( " a == b is %d \n", a == b );
+printf( " a &gt; b is %d \n", a &gt; b );
+printf( " a &lt; b is %d \n", a &lt; b );
+printf( " a &gt;= b is %d \n", a &gt;= b );
+printf( " a &lt;= b is %d \n", a &lt;= b );
+printf( " a != b is %d \n", a != b );
+return 0;
+}</pre>
+<p><img alt="" height="222" src="/images/c9.png" width="172"/></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include&lt;stdio.h&gt;
+void main()
+{
+int a,b;
+a = 15;
+b = 1;
+printf("%d \n", a | b ); /* a OR b */
+printf("%d \n", a &amp; b ); /* a AND b */
+printf("%d \n", a ^ b ); /* a XOR b */
+printf("%d \n", a &lt;&lt; 1 ); /* a 位元左移 1 位 */
+printf("%d \n", a &gt;&gt; 1 ); /* a 位元右移一位 */
+printf("%d \n", ~a ); /* A 的補數運算 */
+}</pre>
+<p><img alt="" height="110" src="/images/c10.png" width="158"/></p>
+<p>二</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+/* read and display a number */
+int main () {
+ char c;
+ printf("Enter character: ");
+ c = getchar(); /* read the character in */
+ printf("Character entered: ");
+ putchar(c); /* write the character */
+ return(0);
+}</pre>
+<p><img alt="" height="28" src="/images/e.ex-1.png" width="167"/></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#define _CRT_SECURE_NO_WARNINGS
+#include&lt;stdio.h&gt;
+int main()
+{
+ int this_is_a_number1, this_is_a_number2, total;
+ printf("Please enter an integer number:\n ");
+ scanf("%d", &amp;this_is_a_number1); /* read number in */
+ printf("You entered %d\n", this_is_a_number1);
+ printf("Please enter another number: \n");
+ scanf("%d", &amp;this_is_a_number2); /* read number in */
+ printf("You entered %d\n", this_is_a_number2);
+ total = this_is_a_number1 + this_is_a_number2;/* add two numbers */
+ printf("total is %d\n", total);
+ return 0;
+}</pre>
+<p><img alt="" height="128" src="/images/e.ex-2.png" width="259"/><br/>  </p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#define _CRT_SECURE_NO_WARNINGS
+#include&lt;stdio.h&gt;
+int main()
+{
+ float this_is_a_number1, this_is_a_number2, total;
+ printf("Please enter a number:\n ");
+ scanf("%f", &amp;this_is_a_number1); /* read decimal number in */
+ printf("You entered %f\n", this_is_a_number1);
+ printf("Please enter another number: \n");
+ scanf("%f", &amp;this_is_a_number2); /* read decimal number in */
+ printf("You entered %f\n", this_is_a_number2);
+Chapter 1 Introduction to C
+6
+ total = this_is_a_number1 + this_is_a_number2;/* add the numbers */
+ printf("total is %f\n", total);
+ return 0;
+}</pre>
+<p><img alt="" height="135" src="data:image/png;base64,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" width="264"/></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#define _CRT_SECURE_NO_WARNINGS
+#include &lt;stdio.h&gt;
+/* multiply two floating point numbers */
+int main()
+{
+ float this_is_a_number1, this_is_a_number2, total;
+ printf("Please enter a number:\n ");
+ scanf("%f", &amp;this_is_a_number1); /* read number in */
+ printf("You entered %f\n", this_is_a_number1);
+ printf("Please enter another number: \n");
+ scanf("%f", &amp;this_is_a_number2); /* read number in */
+ printf("You entered %f\n", this_is_a_number2);
+ total = this_is_a_number1 * this_is_a_number2;/* multiply the numbers */
+ printf("product is %f\n", total);
+ return 0;
+}</pre>
+<p><img alt="" height="129" src="/images/e.ex-4.png" width="234"/></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#define _CRT_SECURE_NO_WARNINGS
+#include&lt;stdio.h&gt;
+/* demonstrate a do loop */
+main()
+{
+ float this_is_a_number, total;
+ int i;
+ total = 0;
+ i = 0;
+ /* do loop goes round until the value of i reaches 10 */
+ do {
+ printf("Please enter a number:\n ");
+ scanf("%f", &amp;this_is_a_number);
+ total = total + this_is_a_number;
+ i++;
+ }while( i &lt; 10);
+ printf("Total Sum is = %f\n", total);
+}</pre>
+<p><img alt="" height="359" src="/images/e.ex-8.png" width="208"/></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#define _CRT_SECURE_NO_WARNINGS
+#include &lt;stdio.h&gt;
+/* Example of a switch operation */
+int main()
+{
+ int this_is_a_number;
+ printf("Please enter an integer between 1 and 5:\n ");
+ scanf("%d", &amp;this_is_a_number);
+ switch (this_is_a_number)
+ {
+ case 1:
+ printf("Case1: Value is: %d", this_is_a_number);
+ break;
+ case 2:
+ printf("Case2: Value is: %d", this_is_a_number);
+ break;
+ case 3:
+ printf("Case3: Value is: %d", this_is_a_number);
+ break;
+ case 4:
+ printf("Case4: Value is: %d", this_is_a_number);
+ break;
+ case 5:
+ printf("Case5: Value is: %d", this_is_a_number);
+ break;
+ default:
+ printf("Error Value is: %d", this_is_a_number); /* The number
+entered was not between 1 and 5 */
+      }
+    return 0;
+   }</pre>
+<p><img alt="" height="70" src="/images/e.ex-9.png" width="328"/></p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#define _CRT_SECURE_NO_WARNINGS
+#include &lt;stdio.h&gt;
+/* Example of a switch operation */
+int main()
+{
+ int this_is_a_number;
+ printf("Please enter an integer between 1 and 5:\n ");
+ scanf("%d", &amp;this_is_a_number);
+ switch (this_is_a_number)
+ {
+ case 1:
+ printf("Case1: Value is: %d", this_is_a_number);
+ break;
+ case 2:
+ printf("Case2: Value is: %d", this_is_a_number);
+ break;
+ case 3:
+ printf("Case3: Value is: %d", this_is_a_number);
+ break;
+ case 4:
+ printf("Case4: Value is: %d", this_is_a_number);
+ break;
+ case 5:
+ printf("Case5: Value is: %d", this_is_a_number);
+ break;
+ default:
+ printf("Error Value is: %d", this_is_a_number); /* The number
+entered was not between 1 and 5 */
+      }
+    return 0;
+   }</pre>
+<p><img alt="" height="72" src="/images/e.ex-10.png" width="307"/><br/><br/></p>
+<p></p>
 <h1>Brython</h1>
 <p><a href="https://en.wikipedia.org/wiki/Python_(programming_language)">https://en.wikipedia.org/wiki/Python_(programming_language)</a></p>
 <h4>Examples:</h4>

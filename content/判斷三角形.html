@@ -2,7 +2,7 @@
         <head>
         <title>cmsite</title>
         <meta charset="utf-8">
-<meta property="head" content="H1">
+<meta property="head" content="H2">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700,900" rel="stylesheet">
         <link rel="stylesheet" href="./../cmsimde/static/chimper/fonts/icomoon/style.css">
@@ -131,7 +131,7 @@ img.add_border {
                             <li><a href="./../blog/index.html">blog</a></li>
                         </ul>
                       </li>
-                     <li><a href='About.html'>About</a><li><a href='Week 5.html'>Week 5</a><li><a href='Week 6.html'>Week 6</a><li><a href='Week 7.html'>Week 7</a><li><a href='ANSIC.html'>ANSIC</a><li><a href='c_ex.html'>c_ex</a><li><a href='Brython.html'>Brython</a></li>
+                     <li><a href='About.html'>About</a><li><a href='Week 5.html'>Week 5</a><li><a href='Week 6.html'>Week 6</a><li><a href='Week 7.html'>Week 7</a><li class='has-children'><a href='ANSIC.html'>ANSIC</a><ul class='dropdown'><li><a href='根據輸入年份產生日曆.html'>根據輸入年份產生日曆</a><li><a href='計算階層.html'>計算階層</a><li><a href='計算閏年.html'>計算閏年</a><li><a href='建立乘法表.html'>建立乘法表</a><li><a href='檢查質數.html'>檢查質數</a><li><a href='猜數字.html'>猜數字</a><li><a href='反轉數字.html'>反轉數字</a><li><a href='總和.html'>總和</a><li><a href='判斷三角形.html'>判斷三角形</a><li><a href='x的n次方.html'>x的n次方</a></li></ul><li><a href='c.ex.html'>c.ex</a><li><a href='Brython.html'>Brython</a></li>
                       </ul>
                 </nav>
               </div>
@@ -142,8 +142,37 @@ img.add_border {
           </div>
           
         </header>
-    <div id="tipue_search_content">ANSIC << <a href='ANSIC.html'>Previous</a> <a href='Brython.html'>Next</a> >> Brython<br /><h1>c_ex</h1>
-<br />ANSIC << <a href='ANSIC.html'>Previous</a> <a href='Brython.html'>Next</a> >> Brython</div>
+    <div id="tipue_search_content">總和 << <a href='總和.html'>Previous</a> <a href='x的n次方.html'>Next</a> >> x的n次方<br /><h1>判斷三角形</h1>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;  // 包含標準輸入/輸出的標頭文件。
+
+int main()  
+{  
+    int sidea, sideb, sidec; // 宣告三角形的三邊的變數。
+
+    /* 
+     * 讀取三角形的三邊長
+     */  
+    printf("輸入三角形的三邊長: ");  // 提示使用者輸入。
+    scanf("%d %d %d", &amp;sidea, &amp;sideb, &amp;sidec);  // 讀取並儲存三角形的三邊。
+
+    if (sidea == sideb &amp;&amp; sideb == sidec) // 檢查是否所有邊都相等。  
+    {  
+        printf("這是一個等邊三角形。\n");  // 印出等邊三角形的訊息。
+    }  
+    else if (sidea == sideb || sidea == sidec || sideb == sidec) // 檢查是否有兩邊相等。  
+    {  
+        printf("這是一個等腰三角形。\n");  // 印出等腰三角形的訊息。
+    }  
+    else // 如果沒有邊相等。  
+    {  
+        printf("這是一個不等邊三角形。\n");  // 印出不等邊三角形的訊息。
+    }  
+
+    return 0;  
+} 
+</pre>
+<p><img alt="" height="108" src="./../images/螢幕擷取畫面 2023-12-21 054442.png" width="260"/></p>
+<br />總和 << <a href='總和.html'>Previous</a> <a href='x的n次方.html'>Next</a> >> x的n次方</div>
         
     <!-- footer -->
       <div class="container">
