@@ -1,0 +1,7 @@
+A coord: (429,125)
+B coord: (279,165)
+E coord: (170,274)
+D coord: (170,274)
+// 利用一個藍色大圓與白色小圓畫出藍色環狀
+gdImageFilledEllipse(img, center_x, center_y, blue_circle_dia, blue_circle_dia, blue);
+gdImageFilledEllipse(img, center_x, center_y, white_circle_dia, white_circle_dia, white);
