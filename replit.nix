@@ -1,5 +1,6 @@
 { pkgs }: {
   deps = [
+    pkgs.imagemagick
     pkgs.libev
     pkgs.gnuplot
     pkgs.ncurses.dev
