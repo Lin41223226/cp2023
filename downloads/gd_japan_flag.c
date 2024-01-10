@@ -1,3 +1,5 @@
+//參照維基百科上面的日本國旗
+//https://zh.m.wikipedia.org/zh-tw/%E6%97%A5%E6%9C%AC
 #include <stdio.h>
 #include <gd.h>
 #include <math.h>

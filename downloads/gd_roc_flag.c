@@ -1,3 +1,5 @@
+//參照維基百科上面的台灣國旗
+//https://zh.m.wikipedia.org/zh-tw/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E5%9C%8B%E6%97%97
 #include <stdio.h>
 #include <gd.h>
 #include <math.h>

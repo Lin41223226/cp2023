@@ -145,7 +145,9 @@ img.add_border {
     <div id="tipue_search_content">Week 6 << <a href='Week 6.html'>Previous</a> <a href='Week15.html'>Next</a> >> Week15<br /><h1>Week 7</h1>
 <p></p>
 <p><img alt="" height="267" src="./../images/proc_flag.png" width="400"/></p>
-<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">//參照維基百科上面的中國國旗
+//https://zh.m.wikipedia.org/zh-tw/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E5%9B%BD%E6%97%97
+#include &lt;stdio.h&gt;
 #include &lt;gd.h&gt;
 #include &lt;math.h&gt;
 
@@ -231,7 +233,9 @@ void draw_star(gdImagePtr img, int x, int y, int size, int color, double rotatio
 </pre>
 <p><br/><br/></p>
 <p><img alt="" height="267" src="./../images/japan_flag.png" width="400"/></p>
-<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">//參照維基百科上面的日本國旗
+//https://zh.m.wikipedia.org/zh-tw/%E6%97%A5%E6%9C%AC
+#include &lt;stdio.h&gt;
 #include &lt;gd.h&gt;
 #include &lt;math.h&gt;
 
@@ -276,11 +280,13 @@ void draw_japan_flag(gdImagePtr img) {
     gdImageFilledRectangle(img, 0, 0, width, height, white);
 
 
-    // 繪製太陽內部
+    // 繪製太陽
     gdImageFilledEllipse(img, center_x, center_y, sun_radius * 3, sun_radius * 3, red);
 }</pre>
 <p><img alt="" height="200" src="./../images/uk_flag.png" width="400"/></p>
-<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">//參照維基百科上的英國國旗
+//https://zh.m.wikipedia.org/zh-tw/%E8%8B%B1%E5%9B%BD%E5%9B%BD%E6%97%97
+#include &lt;stdio.h&gt;
 #include &lt;gd.h&gt;
 #include &lt;math.h&gt;
 
@@ -424,7 +430,9 @@ void draw_uk_flag(gdImagePtr img) {
 
 
   </pre>
-<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">//參照維基百科上面的大韓民國國旗
+//https://zh.m.wikipedia.org/zh-tw/%E5%A4%A7%E9%9F%A9%E6%B0%91%E5%9B%BD
+#include &lt;stdio.h&gt;
 #include &lt;gd.h&gt;
 #include &lt;math.h&gt;
 
@@ -785,8 +793,7 @@ if (outputFile == NULL) {
   }</pre>
 <p><video controls="controls" height="473" width="1008">
 <source src="/image/123456.mp4" type="video/mp4"/></video><br/><br/></p>
-<p><img alt="" height="267" src="./../images/korea_flag.png" width="400"/><br/><br/><br/></p>
-<br />Week 6 << <a href='Week 6.html'>Previous</a> <a href='Week15.html'>Next</a> >> Week15</div>
+<p><img alt="" height="267" src="./../images/korea_flag.png" width="400"/><br/><br/><br/></p><br />Week 6 << <a href='Week 6.html'>Previous</a> <a href='Week15.html'>Next</a> >> Week15</div>
         
     <!-- footer -->
       <div class="container">

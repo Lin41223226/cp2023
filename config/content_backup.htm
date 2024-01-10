@@ -45,8 +45,10 @@ int main() {
     return 0;
 }</pre>
 <p><img alt="" height="210" src="/images/gnuplot_ex1.png" width="420"/><a href="https://nfuedu-my.sharepoint.com/:v:/g/personal/41223226_nfu_edu_tw/EXZl5mv64AlEthlhkL5A9ncBEr2EblgVqzZ7izWFfwWaUw?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&amp;e=HxX74c" title="year.mp4"><img alt="" src="/images/year.mp4" width="400"/></a></p>
-<h1>Week 6 </h1>
-<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+<h1>Week 6</h1>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">//參照維基百科上面的台灣國旗
+//https://zh.m.wikipedia.org/zh-tw/%E4%B8%AD%E8%8F%AF%E6%B0%91%E5%9C%8B%E5%9C%8B%E6%97%97
+#include &lt;stdio.h&gt;
 #include &lt;gd.h&gt;
 #include &lt;math.h&gt;
 
@@ -130,7 +132,9 @@ void draw_white_sun(gdImagePtr img, int center_x, int center_y, int sun_radius, 
     gdImageFilledEllipse(img, center_x, center_y, sun_radius * 1.1, sun_radius * 1.1, white);
 }</pre>
 <p><img caption="false" height="267" src="/images/roc_flag.png" width="400"/></p>
-<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">//參照維基百科上的美國國旗
+//https://zh.m.wikipedia.org/zh-tw/%E7%BE%8E%E5%9B%BD%E5%9B%BD%E6%97%97
+#include &lt;stdio.h&gt;
 #include &lt;gd.h&gt;
 #include &lt;math.h&gt;
 
@@ -217,12 +221,14 @@ void draw_star(gdImagePtr img, int x, int y, int size, int color, double rotatio
 
     // 用指定的颜色填充星星
     gdImageFilledPolygon(img, points, 10, color);
-}</pre>
-<p><img caption="false" height="211" src="/images/usa_flag.png" width="400"/></p>
-<h1>Week 7</h1>
+}
+</pre>
+<p><img caption="false" height="211" src="/images/usa_flag.png" width="400"/></p><h1>Week 7</h1>
 <p></p>
 <p><img alt="" height="267" src="/images/proc_flag.png" width="400"/></p>
-<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">//參照維基百科上面的中國國旗
+//https://zh.m.wikipedia.org/zh-tw/%E4%B8%AD%E5%8D%8E%E4%BA%BA%E6%B0%91%E5%85%B1%E5%92%8C%E5%9B%BD%E5%9B%BD%E6%97%97
+#include &lt;stdio.h&gt;
 #include &lt;gd.h&gt;
 #include &lt;math.h&gt;
 
@@ -308,7 +314,9 @@ void draw_star(gdImagePtr img, int x, int y, int size, int color, double rotatio
 </pre>
 <p><br/><br/></p>
 <p><img alt="" height="267" src="/images/japan_flag.png" width="400"/></p>
-<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">//參照維基百科上面的日本國旗
+//https://zh.m.wikipedia.org/zh-tw/%E6%97%A5%E6%9C%AC
+#include &lt;stdio.h&gt;
 #include &lt;gd.h&gt;
 #include &lt;math.h&gt;
 
@@ -353,11 +361,13 @@ void draw_japan_flag(gdImagePtr img) {
     gdImageFilledRectangle(img, 0, 0, width, height, white);
 
 
-    // 繪製太陽內部
+    // 繪製太陽
     gdImageFilledEllipse(img, center_x, center_y, sun_radius * 3, sun_radius * 3, red);
 }</pre>
 <p><img alt="" height="200" src="/images/uk_flag.png" width="400"/></p>
-<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">//參照維基百科上的英國國旗
+//https://zh.m.wikipedia.org/zh-tw/%E8%8B%B1%E5%9B%BD%E5%9B%BD%E6%97%97
+#include &lt;stdio.h&gt;
 #include &lt;gd.h&gt;
 #include &lt;math.h&gt;
 
@@ -501,7 +511,9 @@ void draw_uk_flag(gdImagePtr img) {
 
 
   </pre>
-<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false">//參照維基百科上面的大韓民國國旗
+//https://zh.m.wikipedia.org/zh-tw/%E5%A4%A7%E9%9F%A9%E6%B0%91%E5%9B%BD
+#include &lt;stdio.h&gt;
 #include &lt;gd.h&gt;
 #include &lt;math.h&gt;
 
@@ -862,8 +874,7 @@ if (outputFile == NULL) {
   }</pre>
 <p><video controls="controls" height="473" width="1008">
 <source src="/image/123456.mp4" type="video/mp4"/></video><br/><br/></p>
-<p><img alt="" height="267" src="/images/korea_flag.png" width="400"/><br/><br/><br/></p>
-<h1>Week15</h1>
+<p><img alt="" height="267" src="/images/korea_flag.png" width="400"/><br/><br/><br/></p><h1>Week15</h1>
 <pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">// https://en.wikipedia.org/wiki/Flag_of_the_Republic_of_China
 // 內政部國旗參考資料: https://www.moi.gov.tw/cp.aspx?n=10621
 // cc roc_flag_in_gd.c -lgd -lm to link with gd and math library
@@ -1342,9 +1353,6 @@ int main() {
 }
 </pre>
 <p><img alt="" height="300" src="/images/motion_plot.png" width="400"/><br/><br/>操作過程<a href="https://nfuedu-my.sharepoint.com/personal/41223226_nfu_edu_tw/_layouts/15/stream.aspx?id=%2Fpersonal%2F41223226%5Fnfu%5Fedu%5Ftw%2FDocuments%2Ffotoslider%5F20231230032939%2Emp4&amp;referrer=StreamWebApp%2EWeb&amp;referrerScenario=AddressBarCopied%2Eview">影片</a>點<a href="https://nfuedu-my.sharepoint.com/:v:/g/personal/41223226_nfu_edu_tw/EeeJWCgtw0lIh4ETAUNCYCQB1sNC7MKwF4jl2W3o63A5bw?e=4u0TUz">這裡</a></p>
-<p></p>
-<p></p>
-<p></p>
 <h1>ANSIC</h1>
 <h2>根據輸入年份產生日曆</h2>
 <pre class="brush:csharp;auto-links:false;toolbar:false" contenteditable="false">#include &lt;stdio.h&gt;

@@ -1,3 +1,5 @@
+//參照維基百科上面的大韓民國國旗
+//https://zh.m.wikipedia.org/zh-tw/%E5%A4%A7%E9%9F%A9%E6%B0%91%E5%9B%BD
 #include <stdio.h>
 #include <gd.h>
 #include <math.h>

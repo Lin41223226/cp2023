@@ -1,9 +1,11 @@
+//參照網站上的日曆範例
+//https://www.w3resource.com/c-programming-exercises/practice/c-programming-practice-exercises-35.php
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 // 定義版面大小
-int width = 120, year; 
+int width = 40, year; 
 int cols, lead, gap;
 
 // 星期幾

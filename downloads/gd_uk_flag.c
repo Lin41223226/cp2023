@@ -1,3 +1,5 @@
+//參照維基百科上的英國國旗
+//https://zh.m.wikipedia.org/zh-tw/%E8%8B%B1%E5%9B%BD%E5%9B%BD%E6%97%97
 #include <stdio.h>
 #include <gd.h>
 #include <math.h>
